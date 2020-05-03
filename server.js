@@ -11,9 +11,138 @@ const connection = mysql.createConnection({
     database: "Employee_TrackDB"
 });
 
-connection.connect(function(err) {
-  if (err) throw err;
+connection.connect(function (err) {
+    if (err) throw err;
+    runSearch();
 });
 
+function runSearch() {
+    inquirer
+        .prompt({
+            name: "action",
+            type: "rawlist",
+            message: "What would you like to do?",
+            choices: [
+                "Add employee",
+                "Add department",
+                "Add role",
+                "View employees",
+                "View departments",
+                "View roles",
+                "Update employee role",
+                "Exit"
+            ]
+        })
+        .then(function (answer) {
+            switch (answer.action) {
+                case "Add employee":
+                    AddEmployee();
+                    break;
 
+                case "Add department":
+                    AddDepartment();
+                    break;
 
+                case "Add role":
+                    AddRole();
+                    break;
+
+                case "View employees":
+                    ViewEmployees();
+                    break;
+
+                case "View departments":
+                    ViewDepartments();
+                    break;
+
+                case "View roles":
+                    ViewRoles();
+                    break;
+
+                case "Update employee role":
+                    UpdateEmployeeRole();
+                    break;
+
+                case "Exit":
+                    Exit();
+                    break;
+            }
+        });
+}
+
+function AddEmployee() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "What's the first name of the employee?",
+          name: "firstname"
+        },
+        {
+          type: "input",
+          message: "What's the last name of the employee?",
+          name: "lastname"
+        },
+        {
+          type: "input",
+          message: "What is the employee's role id number?",
+          name: "roleID"
+        },
+        {
+          type: "input",
+          message: "What is the manager id number?",
+          name: "managerID"
+        }
+      ])
+      .then(function(answer) {
+        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.firstname, answer.lastname, answer.roleID, answer.managerID], function(err, res) {
+          if (err) throw err;
+          console.table(res);
+          runSearch();
+        });
+      });
+  }
+
+  function AddDepartment(){
+    inquirer
+    .prompt({
+        type: "input",
+        message: "What is the name of the department?",
+        name: "departname"
+    })
+    .then(function(answer){
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.departname] , function(err, res) {
+            if (err) throw err;
+            console.table(res);
+            runSearch();
+    });
+    });
+  }
+
+  function AddRole(){
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What's the name of the role?",
+        name: "rolename"
+      },
+      {
+        type: "input",
+        message: "What is the salary for this role?",
+        name: "salary"
+      },
+      {
+        type: "input",
+        message: "What is the department id number?",
+        name: "departID"
+      }
+    ])
+    .then(function(answer) {
+      connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.rolename, answer.salary, answer.departID], function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+      });
+    });
+  }
