@@ -1,14 +1,18 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-const env = require('dotenv').config();
+//const env = require('dotenv').config();
 
 const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
+    host: "localhost",
     port: 3306,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
+    username: "root",
+    password: "Fairfield19",
     database: "Employee_TrackDB"
+    // host: process.env.DB_HOST,
+    // port: 3306,
+    // username: process.env.DB_USER,
+    // password: process.env.DB_PASS,
 });
 
 connection.connect(function (err) {
@@ -181,28 +185,28 @@ function ViewRoles() {
 
 function UpdateEmployeeRole() {
     inquirer
-      .prompt([
-        {
-          type: "input",
-          message: "Which employee would you like to update?",
-          name: "employeeUpdate"
-        },
-  
-        {
-          type: "input",
-          message: "What do you want to update to?",
-          name: "roleUpdate"
-        }
-      ])
-      .then(function(answer) {  
-        let query = "UPDATE employee SET role_id=? WHERE first_name= ?"; 
-        connection.query(query, [answer.roleUpdate, answer.employeeUpdate], function(err, res) {
-          if (err) throw err;
-          console.table(res);
-          startScreen();
+        .prompt([
+            {
+                type: "input",
+                message: "Which employee would you like to update?",
+                name: "employeeUpdate"
+            },
+
+            {
+                type: "input",
+                message: "What do you want to update to?",
+                name: "roleUpdate"
+            }
+        ])
+        .then(function (answer) {
+            let query = "UPDATE employee SET role_id=? WHERE first_name= ?";
+            connection.query(query, [answer.roleUpdate, answer.employeeUpdate], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                runSearch();
+            });
         });
-      });
-  }
+}
 
 
 
