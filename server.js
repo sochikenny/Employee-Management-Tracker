@@ -72,77 +72,110 @@ function runSearch() {
 
 function AddEmployee() {
     inquirer
-      .prompt([
-        {
-          type: "input",
-          message: "What's the first name of the employee?",
-          name: "firstname"
-        },
-        {
-          type: "input",
-          message: "What's the last name of the employee?",
-          name: "lastname"
-        },
-        {
-          type: "input",
-          message: "What is the employee's role id number?",
-          name: "roleID"
-        },
-        {
-          type: "input",
-          message: "What is the manager id number?",
-          name: "managerID"
-        }
-      ])
-      .then(function(answer) {
-        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.firstname, answer.lastname, answer.roleID, answer.managerID], function(err, res) {
-          if (err) throw err;
-          console.table(res);
-          runSearch();
+        .prompt([
+            {
+                type: "input",
+                message: "What's the first name of the employee?",
+                name: "firstname"
+            },
+            {
+                type: "input",
+                message: "What's the last name of the employee?",
+                name: "lastname"
+            },
+            {
+                type: "input",
+                message: "What is the employee's role id number?",
+                name: "roleID"
+            },
+            {
+                type: "input",
+                message: "What is the manager id number?",
+                name: "managerID"
+            }
+        ])
+        .then(function (answer) {
+            let query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
+            connection.query(query, [answer.firstname, answer.lastname, answer.roleID, answer.managerID], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                runSearch();
+            });
         });
-      });
-  }
+}
 
-  function AddDepartment(){
+function AddDepartment() {
     inquirer
-    .prompt({
-        type: "input",
-        message: "What is the name of the department?",
-        name: "departname"
-    })
-    .then(function(answer){
-        connection.query("INSERT INTO department (name) VALUES (?)", [answer.departname] , function(err, res) {
-            if (err) throw err;
-            console.table(res);
-            runSearch();
-    });
-    });
-  }
+        .prompt({
+            type: "input",
+            message: "What is the name of the department?",
+            name: "departname"
+        })
+        .then(function (answer) {
+            let query = "INSERT INTO department (name) VALUES (?)";
+            connection.query(query, [answer.departname], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                runSearch();
+            });
+        });
+}
 
-  function AddRole(){
+function AddRole() {
     inquirer
-    .prompt([
-      {
-        type: "input",
-        message: "What's the name of the role?",
-        name: "rolename"
-      },
-      {
-        type: "input",
-        message: "What is the salary for this role?",
-        name: "salary"
-      },
-      {
-        type: "input",
-        message: "What is the department id number?",
-        name: "departID"
-      }
-    ])
-    .then(function(answer) {
-      connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.rolename, answer.salary, answer.departID], function(err, res) {
+        .prompt([
+            {
+                type: "input",
+                message: "What's the name of the role?",
+                name: "rolename"
+            },
+            {
+                type: "input",
+                message: "What is the salary for this role?",
+                name: "salary"
+            },
+            {
+                type: "input",
+                message: "What is the department id number?",
+                name: "departID"
+            }
+        ])
+        .then(function (answer) {
+            let query = "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)";
+            connection.query(query, [answer.rolename, answer.salary, answer.departID], function (err, res) {
+                if (err) throw err;
+                console.table(res);
+                runSearch();
+            });
+        });
+}
+
+function ViewEmployees() {
+    let query = "SELECT * FROM employee";
+    connection.query(query, function (err, res) {
         if (err) throw err;
         console.table(res);
         runSearch();
-      });
     });
-  }
+
+}
+
+function ViewDepartments() {
+    let query = "SELECT * FROM department";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+    });
+}
+
+function ViewRoles() {
+    let query = "SELECT * FROM role";
+    connection.query(query, function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        runSearch();
+    });
+
+}
+
