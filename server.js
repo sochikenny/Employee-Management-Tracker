@@ -64,7 +64,7 @@ function runSearch() {
                     break;
 
                 case "Exit":
-                    Exit();
+                    connection.end();
                     break;
             }
         });
@@ -178,4 +178,31 @@ function ViewRoles() {
     });
 
 }
+
+function UpdateEmployeeRole() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          message: "Which employee would you like to update?",
+          name: "employeeUpdate"
+        },
+  
+        {
+          type: "input",
+          message: "What do you want to update to?",
+          name: "roleUpdate"
+        }
+      ])
+      .then(function(answer) {  
+        let query = "UPDATE employee SET role_id=? WHERE first_name= ?"; 
+        connection.query(query, [answer.roleUpdate, answer.employeeUpdate], function(err, res) {
+          if (err) throw err;
+          console.table(res);
+          startScreen();
+        });
+      });
+  }
+
+
 
