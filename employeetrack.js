@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
 });
 
 connection.connect(function (err) {
-    if (err) throw err;
+    console.log("connected as id " + connection.threadId);
     runSearch();
 });
 
@@ -75,8 +75,13 @@ function runSearch() {
 }
 
 function AddEmployee() {
+    let query = "SELECT title FROM Employee_TrackDB.role;";
+    connection.query(query, function(err, res) {
+        if (err) throw err;
+        let roleArray = [];
     inquirer
         .prompt([
+           
             {
                 type: "input",
                 message: "What's the first name of the employee?",
@@ -88,38 +93,49 @@ function AddEmployee() {
                 name: "lastname"
             },
             {
-                type: "input",
-                message: "What is the employee's role id number?",
-                name: "roleID"
+                type: "rawlist",
+                choices: function() {
+                    for (let i = 0; i < res.length; i++) {
+                        roleArray.push(res[i].title);
+                    }
+                    return roleArray;
+                },
+                message: "What is the employee's role?",
+                name: "role",
             },
             {
                 type: "input",
-                message: "What is the manager id number?",
+                message: "What is the employer's manager ID #?",
                 name: "managerID"
             }
         ])
         .then(function (answer) {
-            let query = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)";
-            connection.query(query, [answer.firstname, answer.lastname, answer.roleID, answer.managerID], function (err, res) {
-                if (err) throw err;
-                console.table(res);
-                runSearch();
-            });
+            let query = "INSERT INTO employee SET ?";
+            connection.query(query, 
+                {
+                first_name: answer.firstname,
+                last_name: answer.lastname,
+                role_id: roleArray.indexOf(answer.role)+1,
+                manager_id: answer.managerID
+              });
+              
+              runSearch();
         });
+    });
 }
 
 function AddDepartment() {
     inquirer
         .prompt({
             type: "input",
-            message: "What is the name of the department?",
+            message: "What is the name of the department you'd like to add?",
             name: "departname"
         })
         .then(function (answer) {
-            let query = "INSERT INTO department (name) VALUES (?)";
-            connection.query(query, [answer.departname], function (err, res) {
+            let query = "INSERT INTO department SET?";
+            connection.query(query, {name: answer.departname}, function (err, res) {
                 if (err) throw err;
-                console.table(res);
+                console.table("Department Created Successfully!");
                 runSearch();
             });
         });
