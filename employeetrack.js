@@ -205,7 +205,10 @@ function ViewEmployees() {
 }
 
 function ViewDepartments() {
-    let query = "SELECT * FROM department";
+    let query = "SELECT name AS Department, salary AS Total_Pay FROM Employee_TrackDB.employee "
+    query += "INNER JOIN Employee_TrackDB.ROLE ON role.id = employee.role_id "
+    query += "INNER JOIN Employee_TrackDB.department ON role.department_id = department.id GROUP BY department.name;";
+
     connection.query(query, function (err, res) {
         if (err) throw err;
         console.table(res);
@@ -214,7 +217,9 @@ function ViewDepartments() {
 }
 
 function ViewRoles() {
-    let query = "SELECT * FROM role";
+    let query = "SELECT role.title AS Title, name AS Department, role.salary AS Salary FROM Employee_TrackDB.department";
+    query += "INNER JOIN Employee_TrackDB.role ON Employee_TrackDB.department.id = Employee_TrackDB.role.department_id";
+
     connection.query(query, function (err, res) {
         if (err) throw err;
         console.table(res);
