@@ -29,29 +29,7 @@ CREATE TABLE employee (
   FOREIGN KEY(role_id) REFERENCES role(id)
 );
 
-INSERT INTO department (name)
-VALUES ("Human Resources"), 
-       ("R&D"), 
-       ("Engineering"), 
-       ("Accounting"), 
-       ("Sales");
-
-INSERT INTO role (title, salary, department_id)
-VALUES ("manager", 120000.00, 1), 
-       ("engineer", 105000.00, 2), 
-       ("accountant", 75000.00, 3), 
-       ("recruiter", 65000.00, 4), 
-       ("sales associate", 50000.00, 5);
-
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Ikenna", "Nwajagu", 1, 1), 
-       ("Tasha", "Hewitt", 2, 2), 
-       ("Ebuka", "Arinze", 3, 3), 
-       ("Alex", "Barthelemy", 4, 4);
-        
-
-
-
+       
 SELECT * FROM department;
 SELECT * FROM role;
 SELECT * FROM employee;
