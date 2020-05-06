@@ -1,21 +1,19 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
-//const env = require('dotenv').config();
+const env = require('dotenv').config();
 
 const connection = mysql.createConnection({
-    host: "localhost",
+    host: process.env.DB_HOST,
     port: 3306,
-    username: "root",
-    password: "Fairfield19",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
     database: "Employee_TrackDB"
-    // host: process.env.DB_HOST,
-    // port: 3306,
-    // username: process.env.DB_USER,
-    // password: process.env.DB_PASS,
+    
 });
 
 connection.connect(function (err) {
+    if (err) throw err;
     console.log("connected as id " + connection.threadId);
     runSearch();
 });
@@ -196,7 +194,7 @@ function AddRole() {
 
 function ViewEmployees() {
     let query = "SELECT first_name AS FirstName , last_name as LastName , role.title as Role, role.salary AS Salary, department.name AS Department"; 
-    query += "FROM employee INNER JOIN department ON department.id = employee.role_id left JOIN role ON role.id = employee.role_id";
+    query += " FROM employee INNER JOIN department ON department.id = employee.role_id left JOIN role ON role.id = employee.role_id";
     connection.query(query, function (err, res) {
         if (err) throw err;
         console.table(res);
