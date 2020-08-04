@@ -31,7 +31,6 @@ So that I can organize and plan my business
 
 1. JavaScript
 2. Node
-3. Express
-4. MySQL
+3. MySQL
 
 
