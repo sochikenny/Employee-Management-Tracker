@@ -3,7 +3,7 @@
 
 ## Description
 
-A command-line application that allows the user to:
+A command-line application (back-end app) that allows the user to:
 
   * Add departments, roles, employees
 
